@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mapping 06 Australian with tiles</title>
+  <meta name="keywords" content="dataviz, geodata, d3, zoom, pan">
+  <meta name="author" content="Markus Mannheim">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="style.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
+  <script src="https://d3js.org/d3.v4.min.js"></script>
+</head>
+<body>
+  <script>
+    // initial chart variables
+    var titleText = "Australia with tiles",
+        descriptionText = "Experimental mapping with d3.tile",
+        sourceText = "OpenStreetMap contributors",
+        sourceLink = "https://www.openstreetmap.org";
+
+    // map div
+    var container = d3.select("body").append("div")
+                 .attr("id", "container");
+
+    // define map dimensions (pixels)
+    var mapWidth = parseInt(container.style("width")),
+        mapHeight = mapWidth;
+    if (mapHeight > 500) mapHeight = 500;
+
+    // enter title
+    container.append("div")
+             .attr("id", "title")
+             .text(titleText);
+
+    // enter description if it exists
+    if (descriptionText != "") {
+      container.append("div")
+               .attr("id", "description")
+               .text(descriptionText);
+    };
+
+    // svg container
+    var map = container.append("svg")
+           .attr("id", "map")
+           .attr("width", mapWidth)
+           .attr("height", mapHeight);
+
+    var containerHeight = parseInt(container.style("height"));
+
+    // copyright
+    var copyright = container.append("div")
+                 .attr("id", "copyright")
+                 .html("&copy; 2017 (details)")
+                 .on("mouseover", copyrightOn)
+                 .on("mouseout", copyrightOff);
+    var copyrightWidth = parseInt(copyright.style("width"));
+    var copyrightDetail = container.append("div")
+                       .attr("id", "copyrightDetail")
+                       .style("top", containerHeight - 65 + "px")
+                       .html("Graphic coding: &copy; Markus Mannheim<br>" +
+                             "D3 library: &copy; Mike Bostock (see d3js.org)<br>" +
+                             "Map tiles: &copy; OpenStreetMap contibutors<br>" +
+                             "Licences: BSD (coding), CC BY-SA (tiles)");
+
+    // enter source if it exists
+    if (sourceText != "") {
+      source = container.append("div")
+            .attr("id", "source")
+            .style("padding-left", copyrightWidth + "px");
+      if (sourceLink != "") {
+        source.append("a")
+              .attr("href", sourceLink)
+              .attr("target", "blank")
+              .text("Source: " + sourceText);
+      } else {
+        source.text("Source: " + sourceText);
+      };
+    }
+
+    // projection
+    var projection = d3.geoMercator()
+                  .translate([mapWidth / 2, mapHeight / 2])
+                  .center([133.42, -27]);
+
+    var tau = 2 * Math.PI;
+
+    // tile generator
+    var tiles = d3.tile()
+             .size(mapWidth, mapHeight)
+             .scale(projection.scale() * tau)
+             .translate(projection([0, 0]));
+
+    // draw tiles
+    map.selectAll("image")
+       .data(tiles)
+       .enter().append("image")
+         .attr("xlink:href", function(d) { return "http://" + "abc"[d1] % 3] + ".tile.openstreetmap.org/" + d[2] + "/" + d[0] + "/" + [d1] + ".png"; })
+         .attr("x", function(d) { return (d[0] + tiles.translate[0]) * tiles.scale; })
+         .attr("y", function(d) { return (d[1] + tiles.translate[1]) * tiles.scale; })
+         .attr("width", tiles.scale)
+         .attr("height", tiles.scale);
+
+    function copyrightOn() {
+      copyrightDetail.transition()
+      .delay(250)
+      .style("opacity", .9);
+    }
+
+    function copyrightOff() {
+      copyrightDetail.transition()
+      .delay(250)
+      .style("opacity", 0);
+    }
+  </script>
+</body>
+</html>
