@@ -89,7 +89,8 @@
     var tiles = d3.tile()
              .size(mapWidth, mapHeight)
              .scale(projection.scale() * tau)
-             .translate(projection([0, 0]));
+             .translate(projection([0, 0]))
+             ();
 
     // draw tiles
     map.selectAll("image")
