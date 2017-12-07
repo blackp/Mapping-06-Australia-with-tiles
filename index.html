@@ -89,7 +89,7 @@
               .size([mapWidth, mapHeight]);
 
       var zoom = d3.zoom()
-              .scaleExtent([1 << 11, 1 << 22])
+              .scaleExtent([1 << 12, 1 << 22])
               .translateExtent([projection([100, 0]), projection([165, -50])])
               .on("zoom", zoomed);
 
