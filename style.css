@@ -17,11 +17,10 @@ dark red: rgb(150, 30, 27) */
 }
 #container {
   width: 100%;
-  max-width: 620px;
+  max-width: 729px;
 }
 #map {
   margin-top: 10px;
-  fill: rgb(239, 239, 244);
 }
 #title {
   font-weight: bold;
